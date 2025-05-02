@@ -27,35 +27,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PantallaPrincipal()
-        }
-    }
-}
-
-@Composable
-fun PantallaPrincipal() {
-    val context = LocalContext.current
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize(), // Usa todo el espacio disponible
-        verticalArrangement = Arrangement.Center, // Centra verticalmente
-        horizontalAlignment = Alignment.CenterHorizontally // Centra horizontalmente
-    ) {
-        Button(onClick = {
+            val context = LocalContext.current
             val intent = Intent(context, LoginActivity::class.java)
             context.startActivity(intent)
-        }) {
-            Text("Log in")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp)) // Espacio entre botones
-
-        Button(onClick = {
-            val intent = Intent(context, SinginActivity::class.java)
-            context.startActivity(intent)
-        }) {
-            Text("Sign in") // Corregido "Sing in" → "Sign in"
         }
     }
 }
+

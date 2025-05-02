@@ -11,7 +11,7 @@ class LoginActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            InputUserName("Fabri")
+            Login("Fabri")
         }
     }
 }
