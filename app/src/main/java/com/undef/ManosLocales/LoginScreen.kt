@@ -40,7 +40,7 @@ fun Login(name: String) {
                 .fillMaxWidth(0.85f)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.logotipo),
+                painter = painterResource(id = R.drawable.Logotipo),
                 contentDescription = "Logo de la app",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.size(200.dp)
