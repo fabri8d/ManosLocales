@@ -1,5 +1,4 @@
 package com.undef.ManosLocales
-
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun Login(name: String) {
+fun Login() {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val rememberMe = remember { mutableStateOf(false) }
@@ -40,7 +39,7 @@ fun Login(name: String) {
                 .fillMaxWidth(0.85f)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.Logotipo),
+                painter = painterResource(id = R.drawable.logotipo),
                 contentDescription = "Logo de la app",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.size(200.dp)
@@ -86,7 +85,25 @@ fun Login(name: String) {
                     focusedIndicatorColor = Color(0xFF7C5C44),
                     unfocusedIndicatorColor = Color(0xFF7C5C44)
                 )
+
             )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.CenterStart
+            ){
+                Text(
+                    text = "Olvide mi contraseña",
+                    color = Color(0xFF404934),
+                    modifier = Modifier
+                        .clickable {
+                            val intent = Intent(context, SinginActivity::class.java)
+                            context.startActivity(intent)
+                        }
+
+                )
+            }
+
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
