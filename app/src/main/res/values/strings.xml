@@ -2,4 +2,5 @@
     <string name="app_name">Manos Locales</string>
     <string name="title_activity_singin">SinginActivity</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_main_menu">MainMenuActivity</string>
 </resources>

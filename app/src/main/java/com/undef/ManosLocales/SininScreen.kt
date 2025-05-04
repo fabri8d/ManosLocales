@@ -175,7 +175,9 @@ fun Sinin() {
             }
 
             Button(
-                onClick = { /* sin lógica */ },
+                onClick = {
+                    val intent = Intent(context, LoginActivity::class.java)
+                    context.startActivity(intent) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),

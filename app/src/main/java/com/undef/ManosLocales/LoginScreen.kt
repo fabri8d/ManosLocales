@@ -44,7 +44,16 @@ fun Login() {
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.size(200.dp)
             )
-            Text("Iniciar sesión", color = Color(0xFF404934), fontSize = 30.sp)
+            Row(){
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Bienvenido", color = Color(0xFF404934), fontSize = 40.sp)
+                    Text("Inicie sesion para continuar",
+                        color = Color(0xFF404934),
+                        fontSize = 15.sp,
+                        modifier = Modifier.padding(top = 10.dp)) }
+
+            }
+
 
             TextField(
                 value = email.value,
@@ -123,7 +132,9 @@ fun Login() {
             }
 
             Button(
-                onClick = { /* sin lógica */ },
+                onClick = {
+                    val intent = Intent(context, MainMenuActivity::class.java)
+                    context.startActivity(intent) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
@@ -132,7 +143,9 @@ fun Login() {
                 ),
                 shape = RoundedCornerShape(6.dp)
             ) {
-                Text("Iniciar sesion", color = Color.White)
+                Text("Iniciar sesion",
+                    color = Color.White
+                )
             }
             Text(
                 text = "¿No tenés cuenta? Registrate.",
