@@ -3,4 +3,5 @@
     <string name="title_activity_singin">SinginActivity</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
+    <string name="title_activity_remember_pwactivity">RememberPWActivity</string>
 </resources>

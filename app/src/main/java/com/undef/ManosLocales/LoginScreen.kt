@@ -1,10 +1,12 @@
 package com.undef.ManosLocales
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,14 +18,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.text.input.KeyboardType
+import com.undef.ManosLocales.rememberpw.RememberPWActivity
+import com.undef.ManosLocales.utils.textFieldColors
 
 
 @Composable
 fun Login() {
-    val email = remember { mutableStateOf("") }
+    var email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val rememberMe = remember { mutableStateOf(false) }
     val context = LocalContext.current
+
 
     Box(
         modifier = Modifier
@@ -38,41 +46,29 @@ fun Login() {
                 .padding(24.dp)
                 .fillMaxWidth(0.85f)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.logotipo),
-                contentDescription = "Logo de la app",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(200.dp)
-            )
-            Row(){
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Bienvenido", color = Color(0xFF404934), fontSize = 40.sp)
-                    Text("Inicie sesion para continuar",
-                        color = Color(0xFF404934),
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(top = 10.dp)) }
-
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    painter = painterResource(id = R.drawable.logotipo),
+                    contentDescription = "Logo de la app",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(300.dp)
+                )
+                Text("Bienvenido", color = Color(0xFF404934), fontSize = 40.sp)
             }
 
-
+            Text("Inicie sesion para continuar",
+                color = Color(0xFF404934),
+                fontSize = 15.sp,
+                modifier = Modifier.padding(top = 10.dp))
             TextField(
                 value = email.value,
                 onValueChange = { email.value = it },
-                label = { Text("Email", color = Color(0xFF7C5C44)) },
-                singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth(),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedTextColor = Color(0xFF7C5C44),
-                    unfocusedTextColor = Color(0xFF7C5C44),
-                    focusedLabelColor = Color(0xFF7C5C44),
-                    unfocusedLabelColor = Color(0xFF7C5C44),
-                    cursorColor = Color(0xFF7C5C44),
-                    focusedIndicatorColor = Color(0xFF7C5C44),
-                    unfocusedIndicatorColor = Color(0xFF7C5C44)
-                )
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                label = { Text("Email", color = Color(0xFF7C5C44)) },
+                singleLine = true,
+                colors = textFieldColors()
             )
 
             TextField(
@@ -83,18 +79,8 @@ fun Login() {
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth(),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedTextColor = Color(0xFF7C5C44),
-                    unfocusedTextColor = Color(0xFF7C5C44),
-                    focusedLabelColor = Color(0xFF7C5C44),
-                    unfocusedLabelColor = Color(0xFF7C5C44),
-                    cursorColor = Color(0xFF7C5C44),
-                    focusedIndicatorColor = Color(0xFF7C5C44),
-                    unfocusedIndicatorColor = Color(0xFF7C5C44)
-                )
-
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                colors = textFieldColors()
             )
             Box(
                 modifier = Modifier
@@ -106,7 +92,7 @@ fun Login() {
                     color = Color(0xFF404934),
                     modifier = Modifier
                         .clickable {
-                            val intent = Intent(context, SinginActivity::class.java)
+                            val intent = Intent(context, RememberPWActivity::class.java)
                             context.startActivity(intent)
                         }
 
@@ -133,8 +119,12 @@ fun Login() {
 
             Button(
                 onClick = {
-                    val intent = Intent(context, MainMenuActivity::class.java)
-                    context.startActivity(intent) },
+                    if (email.value.contains("@")) {
+                        val intent = Intent(context, MainMenuActivity::class.java)
+                        context.startActivity(intent)
+                    } else {
+                        Toast.makeText(context, "Introduce un email válido", Toast.LENGTH_SHORT).show()
+                    }  },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),

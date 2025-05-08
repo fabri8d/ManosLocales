@@ -67,9 +67,11 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.4.0-alpha12")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.0-rc01")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0-alpha07")
-    implementation ("androidx.activity:activity-ktx:1.8.0")  // o la última estable
-    implementation ("androidx.core:core-ktx:1.12.0")          // o versión reciente
+    implementation ("androidx.activity:activity-ktx:1.8.0")
+    implementation ("androidx.core:core-ktx:1.12.0")          
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.navigation:navigation-compose:2.7.5")
+
 
 }
