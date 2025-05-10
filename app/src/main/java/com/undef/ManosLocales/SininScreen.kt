@@ -25,6 +25,8 @@ import java.util.Calendar
 
 @Composable
 fun Sinin() {
+    val name = remember { mutableStateOf("") }
+    val surname = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -76,6 +78,31 @@ fun Sinin() {
             ) {
                 Text("Registrate", color = Color(0xFF404934), fontSize = 30.sp)
             }
+
+            Row (
+                modifier = Modifier.fillMaxWidth()
+            ){
+                TextField(
+                    value = name.value,
+                    onValueChange = { name.value = it },
+                    label = { Text("Nombre", color = Color(0xFF7C5C44)) },
+                    singleLine = true,
+                    modifier = Modifier.weight(1f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    colors = textFieldColors()
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                TextField(
+                    value = surname.value,
+                    onValueChange = { surname.value = it },
+                    label = { Text("Apellido", color = Color(0xFF7C5C44)) },
+                    singleLine = true,
+                    modifier = Modifier.weight(1f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    colors = textFieldColors()
+                )
+            }
+
 
             TextField(
                 value = userName.value,
