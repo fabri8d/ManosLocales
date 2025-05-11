@@ -1,4 +1,5 @@
-package com.undef.ManosLocales.rememberpw
+package com.undef.ManosLocales.authenticator.rememberpw
+
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -23,16 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.undef.ManosLocales.utils.textFieldColors
 
 @Composable
-fun ResetPassword(onFinished: () -> Unit){
+fun RememberPW(onNext: () -> Unit){
     val context = LocalContext.current
-    var password = remember { mutableStateOf("") }
-    var passwordChecker = remember { mutableStateOf("") }
+    var email = remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -52,48 +51,34 @@ fun ResetPassword(onFinished: () -> Unit){
                 modifier = Modifier
                     .fillMaxWidth()
             ){
-                Text("¡Ya casi terminamos!",
+                Text("Recuperemos tu contraseña",
                     color = Color(0xFF404934),
                     fontSize = 40.sp)
-                Text("Crea una nueva contraseña",
+                Text("Enviaremos un codigo de verificacion a tu mail",
                     color = Color(0xFF404934),
                     fontSize = 15.sp,
                     modifier = Modifier.padding(top = 10.dp))
             }
 
-
             TextField(
-                value = password.value,
-                onValueChange = { password.value = it },
-                label = { Text("Nueva contraseña", color = Color(0xFF7C5C44)) },
+                value = email.value,
+                onValueChange = { email.value = it },
+                modifier = Modifier
+                    .fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                label = { Text("Ingrese su mail", color = Color(0xFF7C5C44)) },
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = textFieldColors()
             )
-            TextField(
-                value = passwordChecker.value,
-                onValueChange = { passwordChecker.value = it },
-                label = { Text("Repita la contraseña", color = Color(0xFF7C5C44)) },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                colors = textFieldColors()
-            )
-
 
             Button(
                 onClick = {
-                    if (password.value.length >=8 && passwordChecker.value.equals(password.value)) {
-                        onFinished()
-                    } else if (password.value.length < 8){
-                        Toast.makeText(context, "La contraseña es menor a 8 caracteres", Toast.LENGTH_SHORT).show()
-                    }else if (!passwordChecker.value.equals(password.value)){
-                        Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                    if (email.value.contains("@")) {
+                        onNext()
+                    } else {
+                        Toast.makeText(context, "Introduce un email válido", Toast.LENGTH_SHORT).show()
                     }
-                },
+                          },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
@@ -102,10 +87,12 @@ fun ResetPassword(onFinished: () -> Unit){
                 ),
                 shape = RoundedCornerShape(6.dp)
             ) {
-                Text("Cambiar contraseña",
+                Text("Enviar codigo",
                     color = Color.White
                 )
             }
+
+
         }
     }
 }

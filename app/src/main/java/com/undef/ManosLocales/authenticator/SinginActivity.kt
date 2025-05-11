@@ -1,4 +1,4 @@
-package com.undef.ManosLocales
+package com.undef.ManosLocales.authenticator
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

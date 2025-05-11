@@ -1,4 +1,4 @@
-package com.undef.ManosLocales
+package com.undef.ManosLocales.entities
 
 data class Product(
     val id: Int,
@@ -6,5 +6,6 @@ data class Product(
     val price: Double,
     val category: String,
     val description: String,
-    val owner: User
+    val owner: Seller,
+//    val image: String
 )

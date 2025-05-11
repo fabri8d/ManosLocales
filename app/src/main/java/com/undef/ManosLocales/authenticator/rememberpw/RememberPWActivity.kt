@@ -1,4 +1,4 @@
-package com.undef.ManosLocales.rememberpw
+package com.undef.ManosLocales.authenticator.rememberpw
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.undef.ManosLocales.LoginActivity
+import com.undef.ManosLocales.authenticator.LoginActivity
 
 
 class RememberPWActivity : ComponentActivity() {
