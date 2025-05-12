@@ -1,19 +1,24 @@
-package com.undef.ManosLocales.mainmenu
+package com.undef.ManosLocales.components
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 
 import com.undef.ManosLocales.entities.Seller
 
@@ -26,23 +31,18 @@ fun SellerItem(seller: Seller) {
             .background(Color.White, shape = RoundedCornerShape(12.dp))
             .padding(16.dp)
     ) {
-        Box(
+
+        // Imagen del vendedor
+        Image(
+            painter = painterResource(id = seller.user.image),
+            contentDescription = "Imagen de ${seller.user.name} ${seller.user.surname}",
             modifier = Modifier
-                .height(100.dp)
+                .height(120.dp)
                 .fillMaxWidth()
-                .background(Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
+                .background(Color.LightGray, shape = RoundedCornerShape(8.dp)), // Color de fondo predeterminado
+            alignment = Alignment.Center,
+            contentScale = ContentScale.Crop
         )
-//        // Imagen del vendedor
-//        Image(
-//            painter = rememberAsyncImagePainter(seller.image),
-//            contentDescription = "Imagen de ${seller.name} ${seller.surname}",
-//            modifier = Modifier
-//                .height(100.dp)
-//                .fillMaxWidth()
-//                .background(Color.LightGray, shape = RoundedCornerShape(8.dp)), // Color de fondo predeterminado
-//            alignment = Alignment.Center,
-//            contentScale = ContentScale.Crop
-//        )
 
         Spacer(modifier = Modifier.height(8.dp))
 

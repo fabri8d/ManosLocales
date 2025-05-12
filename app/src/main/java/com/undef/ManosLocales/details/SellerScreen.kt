@@ -37,13 +37,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.undef.ManosLocales.R
-import com.undef.ManosLocales.mainmenu.ProductItem
+import com.undef.ManosLocales.components.ProductItem
 import com.undef.ManosLocales.utils.ObjectsProvider
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SellerDetailScreen(sellerId: String?, onNavigateToProduct: (String) -> Unit) {
+fun SellerDetailScreen(sellerId: String?,
+                       onNavigateToProduct: (String) -> Unit,
+                       onNavigateToMainMenu: () -> Unit,
+                       onNavigateToFavorites: () -> Unit,
+                       onNavigateToSettings: () -> Unit) {
     val seller = remember(sellerId) {
         ObjectsProvider.sellerLists.find { it.user.id.toString() == sellerId }
     }
@@ -61,7 +65,7 @@ fun SellerDetailScreen(sellerId: String?, onNavigateToProduct: (String) -> Unit)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 10.dp),
+                            .padding(end = 10.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -91,23 +95,25 @@ fun SellerDetailScreen(sellerId: String?, onNavigateToProduct: (String) -> Unit)
                             .padding(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        IconButton(onClick = { /* Acción 1 */ }) {
+                        IconButton(onClick = { onNavigateToFavorites() }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.favorite),
-                                contentDescription = "Favoritos"
+                                contentDescription = "Favoritos",
+                                modifier = Modifier.size(29.dp)
                             )
                         }
-                        IconButton(onClick = { /* Acción 2 */ }) {
+                        IconButton(onClick = { onNavigateToMainMenu() }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.home),
                                 contentDescription = "Inicio",
                                 modifier = Modifier.size(25.dp)
                             )
                         }
-                        IconButton(onClick = { /* Acción 3 */ }) {
+                        IconButton(onClick = { onNavigateToSettings() }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.submenu),
-                                contentDescription = "Submenu"
+                                contentDescription = "Submenu",
+                                modifier = Modifier.size(29.dp)
                             )
                         }
                     }
@@ -122,10 +128,10 @@ fun SellerDetailScreen(sellerId: String?, onNavigateToProduct: (String) -> Unit)
         ) {
             Box (modifier = Modifier
                 .background(Color.White)
-                .fillMaxSize()
-                .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)){
+                .fillMaxSize() )
+            {
                 Column (modifier = Modifier
-                    .background(Color(0xFFe3d6c3), shape = RoundedCornerShape(12.dp))
+                    .background(Color(0xFFe3d6c3))
                     .fillMaxSize()
                     .padding(8.dp)
                     .verticalScroll(scrollState)) {

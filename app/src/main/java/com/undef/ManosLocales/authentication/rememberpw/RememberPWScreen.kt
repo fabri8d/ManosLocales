@@ -1,4 +1,4 @@
-package com.undef.ManosLocales.authenticator.rememberpw
+package com.undef.ManosLocales.authentication.rememberpw
 
 
 import android.widget.Toast
@@ -8,8 +8,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -25,12 +29,9 @@ import androidx.compose.ui.unit.sp
 import com.undef.ManosLocales.utils.textFieldColors
 
 @Composable
-fun VerifyCode(onVerified: () -> Unit) {
+fun RememberPW(onNext: () -> Unit){
     val context = LocalContext.current
-    val code = remember { mutableStateOf("") }
-
-
-
+    var email = remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -44,43 +45,54 @@ fun VerifyCode(onVerified: () -> Unit) {
                 .padding(24.dp)
                 .fillMaxWidth(0.85f)
         ) {
-
             Column(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
             ){
-                Text("Solo un paso mas...",
+                Text("Recuperemos tu contraseña",
                     color = Color(0xFF404934),
                     fontSize = 40.sp)
-                Text("Introduce el código de verificación enviado a su email",
+                Text("Enviaremos un codigo de verificacion a tu mail",
                     color = Color(0xFF404934),
                     fontSize = 15.sp,
                     modifier = Modifier.padding(top = 10.dp))
             }
+
             TextField(
-                value = code.value,
-                onValueChange = {
-                    if (it.length <= 6 && it.all { char -> char.isDigit() }) {
-                        code.value = it
-                        if(it.length == 6) {
-                            if (it == "123456") {
-                                onVerified()
-                            } else {
-                                Toast.makeText(context, "Codigo incorrecto", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
-                },
-                label = { Text("Código de verificación") },
+                value = email.value,
+                onValueChange = { email.value = it },
+                modifier = Modifier
+                    .fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                label = { Text("Ingrese su mail", color = Color(0xFF7C5C44)) },
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth(),
                 colors = textFieldColors()
             )
 
+            Button(
+                onClick = {
+                    if (email.value.contains("@")) {
+                        onNext()
+                    } else {
+                        Toast.makeText(context, "Introduce un email válido", Toast.LENGTH_SHORT).show()
+                    }
+                          },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF997052)
+                ),
+                shape = RoundedCornerShape(6.dp)
+            ) {
+                Text("Enviar codigo",
+                    color = Color.White
+                )
+            }
+
+
         }
     }
-
 }

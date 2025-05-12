@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ManosLocales"
         tools:targetApi="31">
         <activity
-            android:name=".authenticator.rememberpw.RememberPWActivity"
+            android:name=".authentication.rememberpw.RememberPWActivity"
             android:exported="false"
             android:label="@string/title_activity_remember_pwactivity"
             android:theme="@style/Theme.ManosLocales" />
@@ -23,13 +23,13 @@
             android:label="@string/title_activity_main_menu"
             android:theme="@style/Theme.ManosLocales" />
         <activity
-            android:name=".authenticator.SinginActivity"
+            android:name=".authentication.SinginActivity"
             android:exported="false"
             android:label="@string/title_activity_singin"
             android:theme="@style/Theme.ManosLocales"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".authenticator.LoginActivity"
+            android:name=".authentication.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.ManosLocales" />

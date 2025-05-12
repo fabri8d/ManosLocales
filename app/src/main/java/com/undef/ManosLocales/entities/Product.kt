@@ -7,5 +7,5 @@ data class Product(
     val category: String,
     val description: String,
     val owner: Seller,
-//    val image: String
+    val image: Int
 )

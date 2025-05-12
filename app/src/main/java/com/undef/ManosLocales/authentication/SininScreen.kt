@@ -1,4 +1,4 @@
-package com.undef.ManosLocales.authenticator
+package com.undef.ManosLocales.authentication
 
 import android.app.DatePickerDialog
 import android.content.Intent

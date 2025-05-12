@@ -1,5 +1,6 @@
-package com.undef.ManosLocales.mainmenu
+package com.undef.ManosLocales.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,9 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,11 +31,15 @@ fun ProductItem(product: Product) {
             .background(Color.White, shape = RoundedCornerShape(12.dp))
             .padding(16.dp)
     ) {
-        Box(
+        Image(
+            painter = painterResource(id = product.image),
+            contentDescription = "Imagen de ${product.name}",
             modifier = Modifier
-                .height(100.dp)
+                .height(120.dp)
                 .fillMaxWidth()
-                .background(Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
+                .background(Color.LightGray, shape = RoundedCornerShape(8.dp)), // Color de fondo predeterminado
+            alignment = Alignment.Center,
+            contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.height(8.dp))

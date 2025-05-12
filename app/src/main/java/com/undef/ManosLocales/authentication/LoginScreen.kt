@@ -1,4 +1,4 @@
-package com.undef.ManosLocales.authenticator
+package com.undef.ManosLocales.authentication
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -23,7 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.text.input.KeyboardType
 import com.undef.ManosLocales.R
 import com.undef.ManosLocales.mainmenu.MainMenuActivity
-import com.undef.ManosLocales.authenticator.rememberpw.RememberPWActivity
+import com.undef.ManosLocales.authentication.rememberpw.RememberPWActivity
 import com.undef.ManosLocales.utils.textFieldColors
 
 

@@ -33,28 +33,68 @@ fun MenuNavHost() {
                 },
                 onNavigateToSeller = { sellerId ->
                     navController.navigate("SellerView/$sellerId")
+                },
+                onNavigateToFavorites = {
+                    navController.navigate("Favorites")
+                },
+                onNavigateToSettings = {
+                    navController.navigate("Settings")
                 }
             )
         }
 
-//        composable("Settings") {
-//            settingsScreen()
-//        }
-//        composable ("Favorite"){
-//            favoriteScreen()
-//        }
+        composable("Settings") {
+            SettingsScreen(
+                onNavigateToMainMenu = {
+                    navController.navigate("MainMenu")
+                },
+                onNavigateToFavorites = {
+                    navController.navigate("Favorites")
+                }
+            )
+        }
+        composable ("Favorites"){
+            FavoritesScreen(
+                onNavigateToProduct = { productId -> navController.navigate("ProductView/$productId")},
+                onNavigateToSettings = {
+                    navController.navigate("Settings")
+                },
+                onNavigateToMainMenu = {
+                    navController.navigate("MainMenu")
+                }
+            )
+        }
         composable("ProductView/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId")
             ProductDetailScreen(productId = productId,
                 onNavigateToSeller = { sellerId -> navController.navigate("SellerView/$sellerId")},
-                onNavigateToProduct = { productId -> navController.navigate("ProductView/$productId")}
+                onNavigateToProduct = { productId -> navController.navigate("ProductView/$productId")},
+                onNavigateToMainMenu = {
+                    navController.navigate("MainMenu")
+                },
+                onNavigateToFavorites = {
+                    navController.navigate("Favorites")
+                },
+                onNavigateToSettings = {
+                    navController.navigate("Settings")
+                }
+
             )
         }
 
         composable("SellerView/{sellerId}") { backStackEntry ->
             val sellerId = backStackEntry.arguments?.getString("sellerId")
             SellerDetailScreen(sellerId = sellerId,
-                onNavigateToProduct = { productId -> navController.navigate("ProductView/$productId")})
+                onNavigateToProduct = { productId -> navController.navigate("ProductView/$productId")},
+                onNavigateToMainMenu = {
+                    navController.navigate("MainMenu")
+                },
+                onNavigateToFavorites = {
+                    navController.navigate("Favorites")
+                },
+                onNavigateToSettings = {
+                    navController.navigate("Settings")
+                })
         }
 
     }

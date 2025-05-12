@@ -1,5 +1,8 @@
 package com.undef.ManosLocales.utils
 
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import com.undef.ManosLocales.R
 import com.undef.ManosLocales.entities.Product
 import com.undef.ManosLocales.entities.Seller
 import com.undef.ManosLocales.entities.User
@@ -40,7 +43,8 @@ object ObjectsProvider {
                 email = "usuario${i + 1}@mail.com",
                 password = "password${i + 1}",
                 city = cities[i],
-                favoriteProducts = mutableListOf()
+                favoriteProducts = mutableListOf(),
+                image = R.drawable.kira
             )
         }
         _users
@@ -67,7 +71,8 @@ object ObjectsProvider {
                 price = (1000..10000).random() + (0..99).random() / 100.0,
                 category = categories.random(),
                 description = description,
-                owner = owner
+                owner = owner,
+                image = R.drawable.loki2
             )
         }.also { allProducts ->
             // Una vez generados los productos, asignamos favoritos a los usuarios

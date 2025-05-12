@@ -1,5 +1,6 @@
 package com.undef.ManosLocales.mainmenu
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,36 +19,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.painterResource
 import com.undef.ManosLocales.R
 import com.undef.ManosLocales.components.ProductItem
-import com.undef.ManosLocales.components.SellerItem
+
 import com.undef.ManosLocales.utils.ObjectsProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Posts(onNavigateToSeller: (String) -> Unit,
-          onNavigateToProduct: (String) -> Unit,
-          onNavigateToFavorites: () -> Unit,
-          onNavigateToSettings: () -> Unit) {
-    val productsList = remember { ObjectsProvider.productsList }
-    val sellersList = remember { ObjectsProvider.sellerLists }
-    var selectedView by remember { mutableStateOf("Productos") }
+fun FavoritesScreen(onNavigateToProduct: (String) -> Unit,
+                    onNavigateToSettings: () -> Unit,
+                    onNavigateToMainMenu: () -> Unit) {
     var selectedCategory by remember { mutableStateOf("Todos") }
-    var selectedCity by remember { mutableStateOf("Todos") }
-    var expandedView by remember { mutableStateOf(false) }
     var expandedCategory by remember { mutableStateOf(false) }
-    var expandedCity by remember { mutableStateOf(false) }
-    val categories = remember { listOf("Todos") + ObjectsProvider.categories }
-    val cities = remember { listOf("Todos") + ObjectsProvider.cities }
+    val categories = remember {  listOf("Todos") + ObjectsProvider.categories }
+
+    val user = remember {
+        ObjectsProvider.sellerLists.find { it.user.id == 1 }
+    }
+    val favoriteList = remember { user?.user?.favoriteProducts }
 
     val filteredProducts = if (selectedCategory == "Todos") {
-        productsList
+        favoriteList
     } else {
-        productsList.filter { it.category == selectedCategory }
+        favoriteList?.filter { it.category == selectedCategory }
     }
-    val filteredSellers = if (selectedCity == "Todos") {
-        sellersList
-    } else {
-        sellersList.filter { it.user.city == selectedCity }
-    }
+
 
     Scaffold(
         topBar = {
@@ -56,7 +50,7 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(end = 10.dp),
+                            .padding( end = 10.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -68,6 +62,7 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                             painter = painterResource(id = R.drawable.logotipo_transparente),
                             contentDescription = "Logotipo",
                             modifier = Modifier.size(48.dp)
+
                         )
                     }
                 },
@@ -86,14 +81,14 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                             .padding(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        IconButton(onClick = { onNavigateToFavorites() }) {
+                        IconButton(onClick = { /* Acción 1 */ }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.favorite),
                                 contentDescription = "Favoritos",
                                 modifier = Modifier.size(29.dp)
                             )
                         }
-                        IconButton(onClick = { /* Acción 2 */ }) {
+                        IconButton(onClick = { onNavigateToMainMenu() }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.home),
                                 contentDescription = "Inicio",
@@ -103,7 +98,7 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                         IconButton(onClick = { onNavigateToSettings() }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.submenu),
-                                contentDescription = "Settings",
+                                contentDescription = "Submenu",
                                 modifier = Modifier.size(29.dp)
                             )
                         }
@@ -116,6 +111,7 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
+                .background(Color(0xFFe3d6c3))
         ) {
             Row(
                 modifier = Modifier
@@ -125,7 +121,7 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = selectedView,
+                    text = "Favoritos",
                     modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
                     color = Color(0xFFe3d6c3),
                     fontSize = 20.sp,
@@ -134,30 +130,6 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
 
                 Box {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            "Ver: $selectedView",
-                            color = Color(0xFFe3d6c3),
-                            modifier = Modifier
-                                .clickable { expandedView = !expandedView }
-                                .padding(16.dp)
-                        )
-
-                        DropdownMenu(
-                            expanded = expandedView,
-                            onDismissRequest = { expandedView = false },
-                            modifier = Modifier.padding(10.dp)
-                        ) {
-                            listOf("Productos", "Vendedores").forEach { view ->
-                                DropdownMenuItem(
-                                    text = { Text(view) },
-                                    onClick = {
-                                        selectedView = view
-                                        expandedView = false
-                                    }
-                                )
-                            }
-                        }
-                        if (selectedView == "Productos") {
                             Text(
                                 "Categoría: $selectedCategory",
                                 color = Color(0xFFe3d6c3),
@@ -183,38 +155,8 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                                     }
                                 }
                             }
-
-                        }else if (selectedView == "Vendedores"){
-                            Text(
-                                "Ciudad: $selectedCity",
-                                color = Color(0xFFe3d6c3),
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .clickable { expandedCity = !expandedCity }
-                            )
-                            Row(horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.padding(top = 56.dp)){
-                                DropdownMenu(
-                                    expanded = expandedCity,
-                                    onDismissRequest = { expandedCity = false },
-                                    modifier = Modifier.padding(10.dp)
-                                ) {
-                                    cities.forEach { city ->
-                                        DropdownMenuItem(
-                                            text = { Text(city) },
-                                            onClick = {
-                                                selectedCity = city
-                                                expandedCity = false
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-
-
                         }
 
-                    }
                 }
             }
 
@@ -224,8 +166,7 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                     .fillMaxHeight()
             ) {
                 LazyColumn {
-                    if (selectedView == "Productos") {
-                        items(filteredProducts.chunked(2)) { rowItems ->
+                        items(filteredProducts?.chunked(2) ?: emptyList()) { rowItems ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -245,28 +186,7 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                                 }
                             }
                         }
-                    } else if (selectedView == "Vendedores") {
-                        items(filteredSellers.chunked(2)) { rowUsers ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                rowUsers.forEach { seller ->
-                                    Box(modifier = Modifier.weight(1f)
-                                        .clickable{
-                                            onNavigateToSeller(seller.user.id.toString())
-                                        }) {
-                                        SellerItem(seller = seller)
-                                    }
-                                }
-                                if (rowUsers.size == 1) {
-                                    Spacer(modifier = Modifier.weight(1f))
-                                }
-                            }
-                        }
-                    }
+
                 }
             }
         }

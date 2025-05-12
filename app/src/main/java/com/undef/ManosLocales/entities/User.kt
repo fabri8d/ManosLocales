@@ -1,5 +1,7 @@
 package com.undef.ManosLocales.entities
 
+import android.media.Image
+
 data class User(
     val id: Int,
     val name: String,
@@ -9,6 +11,6 @@ data class User(
     val email: String,
     val password: String,
     val city: String,
-    var favoriteProducts: MutableList<Product>
-//    val image: String
+    var favoriteProducts: MutableList<Product>,
+    val image: Int
 )
