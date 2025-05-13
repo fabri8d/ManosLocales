@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
@@ -12,21 +11,25 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.font.FontWeight
 import com.undef.ManosLocales.R
 import com.undef.ManosLocales.components.ProductItem
 import com.undef.ManosLocales.components.SellerItem
+import com.undef.ManosLocales.entities.Product
+import com.undef.ManosLocales.entities.Seller
 import com.undef.ManosLocales.utils.ObjectsProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Posts(onNavigateToSeller: (String) -> Unit,
-          onNavigateToProduct: (String) -> Unit,
-          onNavigateToFavorites: () -> Unit,
-          onNavigateToSettings: () -> Unit) {
+fun Posts(
+    onNavigateToSeller: (String) -> Unit,
+    onNavigateToProduct: (String) -> Unit,
+    onNavigateToFavorites: () -> Unit,
+    onNavigateToSettings: () -> Unit
+) {
     val productsList = remember { ObjectsProvider.productsList }
     val sellersList = remember { ObjectsProvider.sellerLists }
     var selectedView by remember { mutableStateOf("Productos") }
@@ -35,18 +38,21 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
     var expandedView by remember { mutableStateOf(false) }
     var expandedCategory by remember { mutableStateOf(false) }
     var expandedCity by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf(TextFieldValue("")) }
+
+
     val categories = remember { listOf("Todos") + ObjectsProvider.categories }
     val cities = remember { listOf("Todos") + ObjectsProvider.cities }
-
-    val filteredProducts = if (selectedCategory == "Todos") {
-        productsList
-    } else {
-        productsList.filter { it.category == selectedCategory }
+    val view = remember { listOf("Productos", "Vendedores") }
+    val filteredProducts = productsList.filter {
+        (selectedCategory == "Todos" || it.category == selectedCategory) &&
+                (selectedCity == "Todos" || it.owner.user.city == selectedCity) &&
+                it.name.contains(searchText.text, ignoreCase = true)
     }
-    val filteredSellers = if (selectedCity == "Todos") {
-        sellersList
-    } else {
-        sellersList.filter { it.user.city == selectedCity }
+
+    val filteredSellers = sellersList.filter {
+        (selectedCity == "Todos" || it.user.city == selectedCity) &&
+                it.user.name.contains(searchText.text, ignoreCase = true)
     }
 
     Scaffold(
@@ -54,15 +60,39 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
             TopAppBar(
                 title = {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = 10.dp),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(end = 10.dp)
+                            .height(56.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Manos Locales",
-                            color = Color.White
+                        OutlinedTextField(
+                            value = searchText,
+                            onValueChange = { searchText = it },
+                            modifier = Modifier
+                                .fillMaxWidth(0.75f)
+                                .align(Alignment.CenterVertically),
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color(0xFFe3d6c3),
+                                unfocusedContainerColor = Color(0xFFe3d6c3),
+                                focusedTextColor = Color(0xFF7C5C44),
+                                unfocusedTextColor = Color(0xFF7C5C44),
+                                focusedLabelColor = Color(0xFF7C5C44),
+                                unfocusedLabelColor = Color(0xFF7C5C44),
+                                cursorColor = Color(0xFF7C5C44),
+                                focusedIndicatorColor = Color(0xFF7C5C44),
+                                unfocusedIndicatorColor = Color(0xFF7C5C44)
+                            ),
+
+
+                            placeholder = {
+                                Text(
+                                    "Buscar productos o vendedores",
+                                    fontWeight = FontWeight.Light,
+                                    color = Color(0xFF7C5C44),
+
+                            )},
+                            singleLine = true
                         )
                         Image(
                             painter = painterResource(id = R.drawable.logotipo_transparente),
@@ -71,9 +101,7 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF404934)
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF404934))
             )
         },
         bottomBar = {
@@ -81,197 +109,100 @@ fun Posts(onNavigateToSeller: (String) -> Unit,
                 containerColor = Color(0xFFe3d6c3),
                 content = {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
                         IconButton(onClick = { onNavigateToFavorites() }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.favorite),
-                                contentDescription = "Favoritos",
-                                modifier = Modifier.size(29.dp)
-                            )
+                            Icon(painter = painterResource(id = R.drawable.favorite), contentDescription = "Favoritos", modifier = Modifier.size(29.dp))
                         }
                         IconButton(onClick = { /* Acción 2 */ }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.home),
-                                contentDescription = "Inicio",
-                                modifier = Modifier.size(25.dp)
-                            )
+                            Icon(painter = painterResource(id = R.drawable.home), contentDescription = "Inicio", modifier = Modifier.size(25.dp))
                         }
                         IconButton(onClick = { onNavigateToSettings() }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.submenu),
-                                contentDescription = "Settings",
-                                modifier = Modifier.size(29.dp)
-                            )
+                            Icon(painter = painterResource(id = R.drawable.submenu), contentDescription = "Settings", modifier = Modifier.size(29.dp))
                         }
                     }
                 }
             )
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-        ) {
+        Column(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
+
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFF7C5C44)),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth()
+                    .background(Color(0xFF7C5C44)).padding(top = 8.dp, bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Text(
-                    text = selectedView,
-                    modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
-                    color = Color(0xFFe3d6c3),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Box {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            "Ver: $selectedView",
-                            color = Color(0xFFe3d6c3),
-                            modifier = Modifier
-                                .clickable { expandedView = !expandedView }
-                                .padding(16.dp)
-                        )
-
-                        DropdownMenu(
-                            expanded = expandedView,
-                            onDismissRequest = { expandedView = false },
-                            modifier = Modifier.padding(10.dp)
-                        ) {
-                            listOf("Productos", "Vendedores").forEach { view ->
-                                DropdownMenuItem(
-                                    text = { Text(view) },
-                                    onClick = {
-                                        selectedView = view
-                                        expandedView = false
-                                    }
-                                )
-                            }
+                Column (modifier = Modifier.padding(horizontal = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Ver: $selectedView", color = Color.White, modifier = Modifier
+                        .clickable { expandedView = true })
+                    DropdownMenu(expanded = expandedView, onDismissRequest = { expandedView = false }) {
+                        view.forEach {
+                            DropdownMenuItem(
+                                text = { Text(it) },
+                                onClick = {
+                                    selectedView = it
+                                    expandedView = false
+                                })
                         }
-                        if (selectedView == "Productos") {
-                            Text(
-                                "Categoría: $selectedCategory",
-                                color = Color(0xFFe3d6c3),
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .clickable { expandedCategory = !expandedCategory }
-                            )
-                            Row(horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.padding(top = 56.dp)){
-                                DropdownMenu(
-                                    expanded = expandedCategory,
-                                    onDismissRequest = { expandedCategory = false },
-                                    modifier = Modifier.padding(10.dp)
-                                ) {
-                                    categories.forEach { category ->
-                                        DropdownMenuItem(
-                                            text = { Text(category) },
-                                            onClick = {
-                                                selectedCategory = category
-                                                expandedCategory = false
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-
-                        }else if (selectedView == "Vendedores"){
-                            Text(
-                                "Ciudad: $selectedCity",
-                                color = Color(0xFFe3d6c3),
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .clickable { expandedCity = !expandedCity }
-                            )
-                            Row(horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.padding(top = 56.dp)){
-                                DropdownMenu(
-                                    expanded = expandedCity,
-                                    onDismissRequest = { expandedCity = false },
-                                    modifier = Modifier.padding(10.dp)
-                                ) {
-                                    cities.forEach { city ->
-                                        DropdownMenuItem(
-                                            text = { Text(city) },
-                                            onClick = {
-                                                selectedCity = city
-                                                expandedCity = false
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-
-
+                    }
+                }
+                Column (modifier = Modifier.padding(horizontal = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally){
+                    Text("Ciudad: $selectedCity", color = Color.White, modifier = Modifier
+                        .clickable { expandedCity = true })
+                    DropdownMenu(expanded = expandedCity, onDismissRequest = { expandedCity = false }) {
+                        cities.forEach {
+                            DropdownMenuItem(
+                                text = { Text(it) },
+                                onClick = {
+                                    selectedCity = it
+                                    expandedCity = false
+                                })
                         }
-
+                    }
+                }
+                Column (modifier = Modifier.padding(horizontal = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally){
+                    if (selectedView == "Productos") {
+                        Text("Categoría: $selectedCategory", color = Color.White, modifier = Modifier
+                            .clickable { expandedCategory = true })
+                    }
+                    DropdownMenu(expanded = expandedCategory, onDismissRequest = { expandedCategory = false }) {
+                        categories.forEach {
+                            DropdownMenuItem(
+                                text = { Text(it) },
+                                onClick = {
+                                    selectedCategory = it
+                                    expandedCategory = false
+                                })
+                        }
                     }
                 }
             }
 
-            Row(
-                modifier = Modifier
-                    .background(Color(0xFFe3d6c3))
-                    .fillMaxHeight()
-            ) {
-                LazyColumn {
-                    if (selectedView == "Productos") {
-                        items(filteredProducts.chunked(2)) { rowItems ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                rowItems.forEach { product ->
-                                    Box(modifier = Modifier.weight(1f)
-                                        .clickable{
-                                            onNavigateToProduct(product.id.toString())
-                                        }) {
-                                        ProductItem(product = product)
-                                    }
-                                }
-                                if (rowItems.size == 1) {
-                                    Spacer(modifier = Modifier.weight(1f))
-                                }
+            LazyColumn(modifier = Modifier.background(Color(0xFFe3d6c3)).fillMaxSize()) {
+                val itemsToShow = if (selectedView == "Productos") filteredProducts else filteredSellers
+                items(itemsToShow.chunked(2)) { rowItems ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        rowItems.forEach { item ->
+                            Box(modifier = Modifier.weight(1f).clickable {
+                                if (selectedView == "Productos") onNavigateToProduct((item as Product).id.toString())
+                                else onNavigateToSeller((item as Seller).user.id.toString())
+                            }) {
+                                if (selectedView == "Productos") ProductItem(product = item as Product)
+                                else SellerItem(seller = item as Seller)
                             }
                         }
-                    } else if (selectedView == "Vendedores") {
-                        items(filteredSellers.chunked(2)) { rowUsers ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                rowUsers.forEach { seller ->
-                                    Box(modifier = Modifier.weight(1f)
-                                        .clickable{
-                                            onNavigateToSeller(seller.user.id.toString())
-                                        }) {
-                                        SellerItem(seller = seller)
-                                    }
-                                }
-                                if (rowUsers.size == 1) {
-                                    Spacer(modifier = Modifier.weight(1f))
-                                }
-                            }
-                        }
+                        if (rowItems.size == 1) Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             }
         }
     }
 }
-
-
-

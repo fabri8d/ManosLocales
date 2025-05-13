@@ -50,6 +50,22 @@ fun MenuNavHost() {
                 },
                 onNavigateToFavorites = {
                     navController.navigate("Favorites")
+                },
+                onNavigateToModifyAccount = {
+                    navController.navigate("ModifyAccount")
+                }
+            )
+        }
+        composable ("ModifyAccount"){
+            ModifyAccount(
+                onNavigateToFavorites = {
+                    navController.navigate("Favorites")
+                } ,
+                onNavigateToSettings = {
+                    navController.navigate("Settings")
+                },
+                onNavigateToMainMenu = {
+                    navController.navigate("MainMenu")
                 }
             )
         }
@@ -96,6 +112,7 @@ fun MenuNavHost() {
                     navController.navigate("Settings")
                 })
         }
+
 
     }
 }

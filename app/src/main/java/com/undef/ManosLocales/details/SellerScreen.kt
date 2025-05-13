@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +20,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -136,37 +138,67 @@ fun SellerDetailScreen(sellerId: String?,
                     .padding(8.dp)
                     .verticalScroll(scrollState)) {
 
-
-                    Box(
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(8.dp),
                         modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .aspectRatio(1f)
-                            .background(Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
-                    )
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                            .fillMaxWidth()
+                            .padding(start = 30.dp, top = 20.dp, end = 30.dp, bottom = 30.dp)
                     ) {
-                        Text(
-                            seller?.user?.name + " " + seller?.user?.surname,
-                            fontSize = 30.sp
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Top,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = seller?.user?.image ?: R.drawable.loki2),
+                                contentDescription = "Imagen de ${seller?.user?.name}",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color.LightGray, shape = RoundedCornerShape(8.dp)),
+                                alignment = Alignment.Center,
+                                contentScale = ContentScale.Crop
+                            )
+                        }
 
-                        Text(
-                            "Puntuación: " + seller?.rating,
-                            fontSize = 15.sp
-                        )
 
-                        Text(
-                            "Localidad: " + seller?.user?.city,
-                            fontSize = 15.sp
-                        )
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Row(horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()) {
+                                Text(
+                                    seller?.businessName.toString(),
+                                    fontSize = 30.sp
+                                )
+                            }
+                            Text(
+                                seller?.user?.name + " " + seller?.user?.surname,
+                                fontSize = 25.sp
+                            )
+                            Text(
+                                "Puntuación: " + seller?.rating,
+                                fontSize = 15.sp
+                            )
 
-                        Text(
-                            "Contacto: " + seller?.user?.email,
-                            fontSize = 15.sp
-                        )
+                            Text(
+                                "Localidad: " + seller?.user?.city,
+                                fontSize = 15.sp
+                            )
+
+                            Text(
+                                "Contacto: " + seller?.user?.email,
+                                fontSize = 15.sp
+                            )
+
+                        }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Box {
