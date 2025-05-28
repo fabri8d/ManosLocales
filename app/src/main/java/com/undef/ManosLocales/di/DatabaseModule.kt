@@ -28,17 +28,17 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideUserDao(appDatabase: AppDatabase): UserDao {
-        return appDatabase.userDao()
-    }
-    @Provides
-    fun provideProductDao(appDatabase: AppDatabase): ProductDao {
-        return appDatabase.productDao()
+    fun provideUserDao(database: AppDatabase): UserDao {
+        return database.userDao()
     }
 
     @Provides
-    fun provideSellerDao(appDatabase: AppDatabase): SellerDao {
-        return appDatabase.sellerDao()
+    fun provideProductDao(database: AppDatabase): ProductDao {
+        return database.productDao()
     }
 
+    @Provides
+    fun provideSellerDao(database: AppDatabase): SellerDao {
+        return database.sellerDao()
+    }
 }

@@ -31,16 +31,22 @@ import com.undef.ManosLocales.presentation.viewmodel.UserViewModel
 fun Login(
     userViewModel: UserViewModel = hiltViewModel()
 ) {
-    var email by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current
     val isAuthenticated by userViewModel.isAuthenticated.collectAsState()
+    val loginError by userViewModel.loginError.collectAsState()
 
-    // Navegar a MainMenu cuando se autentique correctamente
     LaunchedEffect(isAuthenticated) {
         if (isAuthenticated) {
             val intent = Intent(context, MainMenuActivity::class.java)
             context.startActivity(intent)
+        }
+    }
+
+    LaunchedEffect(loginError) {
+        loginError?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -75,11 +81,11 @@ fun Login(
             )
 
             TextField(
-                value = email,
-                onValueChange = { email = it },
+                value = username,
+                onValueChange = { username = it },
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                label = { Text("Email", color = Color(0xFF7C5C44)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                label = { Text("Username", color = Color(0xFF7C5C44)) },
                 singleLine = true,
                 colors = textFieldColors()
             )
@@ -113,11 +119,8 @@ fun Login(
 
             Button(
                 onClick = {
-                    if (email.contains("@")) {
-                        userViewModel.login(email, password)
-                    } else {
-                        Toast.makeText(context, "Introduce un email válido", Toast.LENGTH_SHORT).show()
-                    }
+                        userViewModel.login(username, password)
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()

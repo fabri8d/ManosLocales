@@ -75,7 +75,7 @@ object ObjectsProvider {
         }.also { allProducts ->
             // Una vez generados los productos, asignamos favoritos a los usuarios
             _users.forEach { user ->
-                user.favoriteProducts += allProducts.shuffled().take((3..5).random())
+                user.favoriteProducts = allProducts.shuffled().take((3..5).random()) as MutableList<Product>?
             }
         }
     }

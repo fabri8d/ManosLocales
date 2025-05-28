@@ -57,6 +57,18 @@ fun Sinin(
             datePicker.maxDate = System.currentTimeMillis()
         }
     }
+    val registeredUser by userViewModel.registeredUser.collectAsState()
+
+    LaunchedEffect(registeredUser) {
+        registeredUser?.let { user ->
+            Toast.makeText(context, "Registrado: ${user.email}", Toast.LENGTH_LONG).show()
+
+            // Navegar a LoginActivity después del registro exitoso
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -211,9 +223,9 @@ fun Sinin(
                             password = password.value,
                             city = "",
                             dateOfBirth = dateOfBirth.value.toString(),
-                            name = "",
+                            name = name.value,
                             image = 1,
-                            surname = "",
+                            surname = surname.value,
                             favoriteProducts = null
 
 
@@ -221,11 +233,6 @@ fun Sinin(
                             // si tienes más campos en User, agregalos acá
                         )
                         userViewModel.register(newUser)
-                        Toast.makeText(context, "Registro exitoso. Por favor inicia sesión.", Toast.LENGTH_LONG).show()
-
-                        // Navegar a LoginActivity
-                        val intent = Intent(context, LoginActivity::class.java)
-                        context.startActivity(intent)
                     }
                 }
             },

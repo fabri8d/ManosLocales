@@ -21,22 +21,39 @@ class UserViewModel @Inject constructor(
     private val _isAuthenticated = MutableStateFlow(false)
     val isAuthenticated: StateFlow<Boolean> = _isAuthenticated
 
+    private val _loginError = MutableStateFlow<String?>(null)
+    val loginError: StateFlow<String?> = _loginError
+
+
+    private val _registeredUser = MutableStateFlow<User?>(null)
+    val registeredUser: StateFlow<User?> = _registeredUser
+
+
     fun login(username: String, password: String) {
         viewModelScope.launch {
             val isValid = userRepository.validateUserCredentials(username, password)
-            _isAuthenticated.value = isValid
             if (isValid) {
+                _isAuthenticated.value = true
+                _loginError.value = null
                 val user = userRepository.getUserByUsername(username)
                 _currentUser.value = user
             } else {
+                _isAuthenticated.value = false
+                _loginError.value = "Email o contraseña incorrectos, ${username}, $password"
                 _currentUser.value = null
             }
         }
     }
 
     fun register(user: User) {
+
         viewModelScope.launch {
-            userRepository.saveUserWithHashedPassword(user)
+            try {
+                val newUser = userRepository.saveUserWithHashedPassword(user)
+                _registeredUser.value = newUser
+            } catch (e: Exception) {
+                // Manejo de errores si lo necesitas
+            }
         }
     }
 

@@ -6,8 +6,9 @@ import com.undef.ManosLocales.data.local.entities.User
 import com.undef.ManosLocales.data.mapper.toDomain
 import com.undef.ManosLocales.data.mapper.toEntity
 import at.favre.lib.crypto.bcrypt.BCrypt
+import javax.inject.Inject
 
-class UserRepositoryImpl(
+class UserRepositoryImpl @Inject constructor(
     private val userDao: UserDao,
     private val prefs: SharedPreferences
 ) : UserRepository {
@@ -47,10 +48,11 @@ class UserRepositoryImpl(
             .apply()
     }
 
-    override suspend fun saveUserWithHashedPassword(user: User) {
+    override suspend fun saveUserWithHashedPassword(user: User): User {
         val hashedPassword = BCrypt.withDefaults().hashToString(12, user.password.toCharArray())
         val userToSave = user.copy(password = hashedPassword)
         userDao.insertUser(userToSave.toEntity())
+        return user
     }
 
     override suspend fun validateUserCredentials(username: String, plainPassword: String): Boolean {
