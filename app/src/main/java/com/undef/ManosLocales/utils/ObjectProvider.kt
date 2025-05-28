@@ -1,11 +1,9 @@
 package com.undef.ManosLocales.utils
 
-import androidx.compose.foundation.Image
-import androidx.compose.ui.res.painterResource
 import com.undef.ManosLocales.R
-import com.undef.ManosLocales.entities.Product
-import com.undef.ManosLocales.entities.Seller
-import com.undef.ManosLocales.entities.User
+import com.undef.ManosLocales.data.local.entities.Product
+import com.undef.ManosLocales.data.local.entities.Seller
+import com.undef.ManosLocales.data.local.entities.User
 
 object ObjectsProvider {
 
