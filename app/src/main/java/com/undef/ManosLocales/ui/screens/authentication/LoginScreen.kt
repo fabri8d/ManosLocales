@@ -47,6 +47,7 @@ fun Login(
     LaunchedEffect(loginError) {
         loginError?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            userViewModel.clearLoginError()
         }
     }
 

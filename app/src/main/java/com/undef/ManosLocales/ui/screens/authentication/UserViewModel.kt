@@ -28,34 +28,53 @@ class UserViewModel @Inject constructor(
     private val _registeredUser = MutableStateFlow<User?>(null)
     val registeredUser: StateFlow<User?> = _registeredUser
 
+    private val _emailAlreadyUsed = MutableStateFlow(false)
+    val emailAlreadyUsed: StateFlow<Boolean> = _emailAlreadyUsed
+
+    private val _loginErrorFlag = MutableStateFlow(false)
+    val loginErrorFlag: StateFlow<Boolean> = _loginErrorFlag
+
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
-            val isValid = userRepository.validateUserCredentials(username, password)
-            if (isValid) {
-                _isAuthenticated.value = true
-                _loginError.value = null
-                val user = userRepository.getUserByUsername(username)
-                _currentUser.value = user
-            } else {
+            try {
+                val isValid = userRepository.validateUserCredentials(username, password)
+                if (isValid) {
+                    _isAuthenticated.value = true
+                    val user = userRepository.getUserByUsername(username)
+                    _currentUser.value = user
+                } else {
+                    _isAuthenticated.value = false
+                    _loginError.value = "Nombre de usuario o contraseña incorrectos"
+                    _currentUser.value = null
+                }
+            } catch (e: Exception) {
                 _isAuthenticated.value = false
-                _loginError.value = "Email o contraseña incorrectos, ${username}, $password"
-                _currentUser.value = null
+                _loginError.value = "Error al intentar iniciar sesión: ${e.localizedMessage}"
             }
         }
     }
+
+
 
     fun register(user: User) {
-
         viewModelScope.launch {
-            try {
-                val newUser = userRepository.saveUserWithHashedPassword(user)
-                _registeredUser.value = newUser
-            } catch (e: Exception) {
-                // Manejo de errores si lo necesitas
+            val existingUser = userRepository.getUserByEmail(user.email)
+            if (existingUser != null) {
+                _emailAlreadyUsed.value = true
+                _registeredUser.value = null
+            } else {
+                try {
+                    val newUser = userRepository.saveUserWithHashedPassword(user)
+                    _registeredUser.value = newUser
+                    _emailAlreadyUsed.value = false
+                } catch (e: Exception) {
+                    // Manejo de errores si lo necesitas
+                }
             }
         }
     }
+
 
     fun logout() {
         userRepository.clearSession()
@@ -70,5 +89,12 @@ class UserViewModel @Inject constructor(
     fun loadSession() {
         val token = userRepository.getAuthToken()
         _isAuthenticated.value = token != null
+    }
+    fun resetEmailAlreadyUsedFlag() {
+        _emailAlreadyUsed.value = false
+    }
+
+    fun clearLoginError() {
+        _loginError.value = null
     }
 }

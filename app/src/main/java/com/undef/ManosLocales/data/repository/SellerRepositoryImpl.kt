@@ -5,6 +5,7 @@ import com.undef.ManosLocales.data.local.dao.UserDao
 import com.undef.ManosLocales.data.mapper.toDomain
 import com.undef.ManosLocales.data.mapper.toEntity
 import com.undef.ManosLocales.data.local.entities.Seller
+import com.undef.ManosLocales.data.local.entities.User
 
 class SellerRepositoryImpl(
     private val sellerDao: SellerDao,
@@ -27,5 +28,9 @@ class SellerRepositoryImpl(
 
     override suspend fun deleteAllSellers() {
         sellerDao.deleteAllSellers()
+    }
+
+    override suspend fun registerSeller(user: User){
+
     }
 }

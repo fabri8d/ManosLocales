@@ -69,6 +69,15 @@ fun Sinin(
         }
     }
 
+    val emailAlreadyUsed by userViewModel.emailAlreadyUsed.collectAsState()
+
+    LaunchedEffect(emailAlreadyUsed) {
+        if (emailAlreadyUsed) {
+            Toast.makeText(context, "Este correo ya está registrado", Toast.LENGTH_LONG).show()
+            userViewModel.resetEmailAlreadyUsedFlag()
+
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -227,10 +236,6 @@ fun Sinin(
                             image = 1,
                             surname = surname.value,
                             favoriteProducts = null
-
-
-                            // El repositorio debería hashear la contraseña
-                            // si tienes más campos en User, agregalos acá
                         )
                         userViewModel.register(newUser)
                     }

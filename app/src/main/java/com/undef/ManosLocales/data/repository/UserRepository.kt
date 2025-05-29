@@ -11,4 +11,5 @@ interface UserRepository {
     fun saveAuthToken(token: String)
     fun getAuthToken(): String?
     fun clearSession()
+    suspend fun getUserByEmail(email: String): User?
 }

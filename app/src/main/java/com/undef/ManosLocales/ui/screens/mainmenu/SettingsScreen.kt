@@ -43,7 +43,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.undef.ManosLocales.R
+import com.undef.ManosLocales.presentation.viewmodel.UserViewModel
+import com.undef.ManosLocales.ui.screens.authentication.LoginActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,6 +59,7 @@ fun SettingsScreen(
     var notificationTimer = remember { mutableStateOf("") }
     var isFavoriteChecked by remember { mutableStateOf(false) }
     var isNotificationChecked by remember { mutableStateOf(false) }
+    val userViewModel: UserViewModel = hiltViewModel()
 
     Scaffold(
         topBar = {
@@ -285,6 +289,28 @@ fun SettingsScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Contactar con el desarrollador", fontSize = 20.sp, color = Color(0xFF7C5C44))
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                        .height(56.dp)
+                        .clickable {
+                            userViewModel.logout()
+                            context.startActivity(Intent(context, LoginActivity::class.java))
+                        }
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.usuario),
+                            contentDescription = "cerrar sesión",
+                            modifier = Modifier.size(25.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Cerrar sesion", fontSize = 20.sp, color = Color(0xFF7C5C44))
                     }
                 }
             }

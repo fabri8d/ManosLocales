@@ -48,6 +48,11 @@ class UserRepositoryImpl @Inject constructor(
             .apply()
     }
 
+    override suspend fun getUserByEmail(email: String): User? {
+        val entity = userDao.getUserByEmail(email) ?: return null
+        return entity.toDomain()
+    }
+
     override suspend fun saveUserWithHashedPassword(user: User): User {
         val hashedPassword = BCrypt.withDefaults().hashToString(12, user.password.toCharArray())
         val userToSave = user.copy(password = hashedPassword)
@@ -60,4 +65,5 @@ class UserRepositoryImpl @Inject constructor(
         val result = BCrypt.verifyer().verify(plainPassword.toCharArray(), userEntity.password)
         return result.verified
     }
+
 }
