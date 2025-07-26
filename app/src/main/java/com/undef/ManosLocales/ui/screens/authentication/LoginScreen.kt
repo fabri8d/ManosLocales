@@ -24,8 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.undef.ManosLocales.R
 import com.undef.ManosLocales.ui.screens.mainmenu.MainMenuActivity
 import com.undef.ManosLocales.ui.screens.authentication.rememberpw.RememberPWActivity
+import com.undef.ManosLocales.ui.viewmodels.UserViewModel
 import com.undef.ManosLocales.utils.textFieldColors
-import com.undef.ManosLocales.presentation.viewmodel.UserViewModel
 
 @Composable
 fun Login(

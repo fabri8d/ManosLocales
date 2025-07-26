@@ -20,18 +20,22 @@ import com.undef.ManosLocales.ui.components.ProductItem
 import com.undef.ManosLocales.ui.components.SellerItem
 import com.undef.ManosLocales.data.local.entities.Product
 import com.undef.ManosLocales.data.local.entities.Seller
+import com.undef.ManosLocales.ui.viewmodels.MainMenuViewModel
 import com.undef.ManosLocales.utils.ObjectsProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Posts(
+    viewModel: MainMenuViewModel,
     onNavigateToSeller: (String) -> Unit,
     onNavigateToProduct: (String) -> Unit,
     onNavigateToFavorites: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
-    val productsList = remember { ObjectsProvider.productsList }
-    val sellersList = remember { ObjectsProvider.sellerLists }
+    val productsList by viewModel.products.collectAsState()
+    val sellersList by viewModel.sellers.collectAsState()
+
+    val view = remember { listOf("Productos", "Vendedores") }
     var selectedView by remember { mutableStateOf("Productos") }
     var selectedCategory by remember { mutableStateOf("Todos") }
     var selectedCity by remember { mutableStateOf("Todos") }
@@ -40,10 +44,10 @@ fun Posts(
     var expandedCity by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
 
+    val categories = remember { listOf("Todos", "Higiene", "Decoración", "Accesorios", "Pan", "Textil", "Bebida", "Papelería", "Cerámica") }
+    val cities = remember { listOf("Todos", "Córdoba", "Villa María", "Río Cuarto", "Carlos Paz", "San Francisco", "Alta Gracia", "Bell Ville", "Jesús María", "La Falda", "Villa Dolores") }
 
-    val categories = remember { listOf("Todos") + ObjectsProvider.categories }
-    val cities = remember { listOf("Todos") + ObjectsProvider.cities }
-    val view = remember { listOf("Productos", "Vendedores") }
+
     val filteredProducts = productsList.filter {
         (selectedCategory == "Todos" || it.category == selectedCategory) &&
                 (selectedCity == "Todos" || it.owner.user.city == selectedCity) &&

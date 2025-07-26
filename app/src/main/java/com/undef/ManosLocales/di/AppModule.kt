@@ -1,14 +1,13 @@
 package com.undef.ManosLocales.di
 
+import SellerRepositoryImpl
 import android.content.Context
 import android.content.SharedPreferences
 import com.undef.ManosLocales.data.local.dao.ProductDao
-import com.undef.ManosLocales.data.local.dao.SellerDao
-import com.undef.ManosLocales.data.local.dao.UserDao
+import com.undef.ManosLocales.data.remote.ApiService
 import com.undef.ManosLocales.data.repository.ProductRepository
 import com.undef.ManosLocales.data.repository.ProductRepositoryImpl
 import com.undef.ManosLocales.data.repository.SellerRepository
-import com.undef.ManosLocales.data.repository.SellerRepositoryImpl
 import com.undef.ManosLocales.data.repository.UserRepository
 import com.undef.ManosLocales.data.repository.UserRepositoryImpl
 import com.undef.ManosLocales.data.repository.helpers.SellerProvider
@@ -33,18 +32,16 @@ object AppModule {
     @Provides
     @Singleton
     fun provideUserRepository(
-        userDao: UserDao,
-        sharedPreferences: SharedPreferences
+        sharedPreferences: SharedPreferences,
+        apiService: ApiService
     ): UserRepository {
-        return UserRepositoryImpl(userDao, sharedPreferences)
+        return UserRepositoryImpl( sharedPreferences, apiService)
     }
+
     @Provides
     @Singleton
-    fun provideSellerRepository(
-        sellerDao: SellerDao,
-        userDao: UserDao
-    ): SellerRepository {
-        return SellerRepositoryImpl(sellerDao, userDao)
+    fun provideSellerRepository(apiService: ApiService): SellerRepository {
+        return SellerRepositoryImpl(apiService)
     }
 
     @Provides

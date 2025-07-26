@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.undef.ManosLocales.R
-import com.undef.ManosLocales.presentation.viewmodel.UserViewModel
+import com.undef.ManosLocales.ui.viewmodels.UserViewModel
 import com.undef.ManosLocales.ui.screens.authentication.LoginActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +53,8 @@ import com.undef.ManosLocales.ui.screens.authentication.LoginActivity
 fun SettingsScreen(
     onNavigateToMainMenu: () -> Unit,
     onNavigateToFavorites: () -> Unit,
-    onNavigateToModifyAccount: () -> Unit
+    onNavigateToModifyAccount: () -> Unit,
+    onNavigateToBecomeSeller: () -> Unit  // Nuevo parámetro para navegación
 ) {
     val context = LocalContext.current
     var notificationTimer = remember { mutableStateOf("") }
@@ -136,6 +137,7 @@ fun SettingsScreen(
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                // Mi cuenta
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -156,6 +158,7 @@ fun SettingsScreen(
                     }
                 }
 
+                // Recibir actualizaciones de favoritos
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -171,7 +174,11 @@ fun SettingsScreen(
                             modifier = Modifier.size(25.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Recibir actualizaciones de favoritos", fontSize = 20.sp, color = Color(0xFF7C5C44))
+                        Text(
+                            "Recibir actualizaciones de favoritos",
+                            fontSize = 20.sp,
+                            color = Color(0xFF7C5C44)
+                        )
                     }
 
                     Checkbox(
@@ -185,6 +192,7 @@ fun SettingsScreen(
                     )
                 }
 
+                // Recibir notificaciones de ofertas
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -200,7 +208,11 @@ fun SettingsScreen(
                             modifier = Modifier.size(25.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Recibir notificaciones de ofertas", fontSize = 20.sp, color = Color(0xFF7C5C44))
+                        Text(
+                            "Recibir notificaciones de ofertas",
+                            fontSize = 20.sp,
+                            color = Color(0xFF7C5C44)
+                        )
                     }
 
                     Checkbox(
@@ -214,7 +226,9 @@ fun SettingsScreen(
                     )
                 }
 
-                Row(verticalAlignment = Alignment.CenterVertically,
+                // Recibir notificaciones cada X horas
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 10.dp)
@@ -255,6 +269,7 @@ fun SettingsScreen(
 
                 }
 
+                // Contactar con el desarrollador
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -291,6 +306,31 @@ fun SettingsScreen(
                         Text("Contactar con el desarrollador", fontSize = 20.sp, color = Color(0xFF7C5C44))
                     }
                 }
+
+                // NUEVO: Hacerse vendedor
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                        .height(56.dp)
+                        .clickable {
+                            onNavigateToBecomeSeller()
+                        }
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.usuario), // Cambia por el ícono que tengas para tienda
+                            contentDescription = "Hacerse vendedor",
+                            modifier = Modifier.size(25.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Hacerse vendedor", fontSize = 20.sp, color = Color(0xFF7C5C44))
+                    }
+                }
+
+                // Cerrar sesión
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -310,7 +350,7 @@ fun SettingsScreen(
                             modifier = Modifier.size(25.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Cerrar sesion", fontSize = 20.sp, color = Color(0xFF7C5C44))
+                        Text("Cerrar sesión", fontSize = 20.sp, color = Color(0xFF7C5C44))
                     }
                 }
             }

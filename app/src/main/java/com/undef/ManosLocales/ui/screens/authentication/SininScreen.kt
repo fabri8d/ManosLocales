@@ -2,7 +2,6 @@ package com.undef.ManosLocales.ui.screens.authentication
 
 import android.content.Intent
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -22,10 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.undef.ManosLocales.data.local.entities.User
-import com.undef.ManosLocales.presentation.viewmodel.UserViewModel
 import com.undef.ManosLocales.utils.textFieldColors
 import java.util.Calendar
 import android.app.DatePickerDialog
+import com.undef.ManosLocales.data.remote.models.UserRegisterRequest
+import com.undef.ManosLocales.ui.viewmodels.UserViewModel
 
 @Composable
 fun Sinin(
@@ -225,7 +224,7 @@ fun Sinin(
                     }
                     else -> {
                         // Crear el usuario
-                        val newUser = User(
+                        /*val newUser = User(
                             id = 0, // o lo que uses para que se genere automáticamente
                             username = userName.value.trim(),
                             email = email.value.trim(),
@@ -237,7 +236,16 @@ fun Sinin(
                             surname = surname.value,
                             favoriteProducts = null
                         )
-                        userViewModel.register(newUser)
+                        userViewModel.register(newUser)*/
+                        val request = UserRegisterRequest(
+                            username = userName.value.trim(),
+                            firstName = name.value,
+                            lastName = surname.value,
+                            email = email.value.trim(),
+                            password = password.value
+                        )
+                        userViewModel.registerUserRemote(request)
+
                     }
                 }
             },

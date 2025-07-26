@@ -1,15 +1,21 @@
 package com.undef.ManosLocales.data.repository
 
 import com.undef.ManosLocales.data.local.entities.User
+import com.undef.ManosLocales.data.remote.models.UserRegisterRequest
+
+
 
 interface UserRepository {
-    suspend fun getUserByUsername(username: String): User?
-    suspend fun getUserById(id: Int): User?
-    suspend fun deleteUser(user: User)
-    suspend fun saveUserWithHashedPassword(user: User): User
-    suspend fun validateUserCredentials(username: String, plainPassword: String): Boolean
-    fun saveAuthToken(token: String)
     fun getAuthToken(): String?
+    fun saveAuthToken(token: String)
     fun clearSession()
-    suspend fun getUserByEmail(email: String): User?
+
+    suspend fun loginRemote(username: String, password: String): User?
+    suspend fun registerUser(request: UserRegisterRequest): Boolean
+    suspend fun fetchRemoteUsers(): List<User>
+
+    // Nuevos métodos para persistir usuario en prefs
+    fun saveUser(user: User)
+    fun getUser(): User?
 }
+

@@ -1,8 +1,9 @@
-package com.undef.ManosLocales.presentation.viewmodel
+package com.undef.ManosLocales.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.undef.ManosLocales.data.local.entities.User
+import com.undef.ManosLocales.data.remote.models.UserRegisterRequest
 import com.undef.ManosLocales.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,40 +39,31 @@ class UserViewModel @Inject constructor(
     fun login(username: String, password: String) {
         viewModelScope.launch {
             try {
-                val isValid = userRepository.validateUserCredentials(username, password)
-                if (isValid) {
-                    _isAuthenticated.value = true
-                    val user = userRepository.getUserByUsername(username)
+                val user = userRepository.loginRemote(username, password)
+                if (user != null) {
                     _currentUser.value = user
+                    _isAuthenticated.value = true
                 } else {
+                    _currentUser.value = null
                     _isAuthenticated.value = false
                     _loginError.value = "Nombre de usuario o contraseña incorrectos"
-                    _currentUser.value = null
                 }
             } catch (e: Exception) {
+                _currentUser.value = null
                 _isAuthenticated.value = false
                 _loginError.value = "Error al intentar iniciar sesión: ${e.localizedMessage}"
             }
         }
     }
 
-
-
-    fun register(user: User) {
-        viewModelScope.launch {
-            val existingUser = userRepository.getUserByEmail(user.email)
-            if (existingUser != null) {
-                _emailAlreadyUsed.value = true
-                _registeredUser.value = null
-            } else {
-                try {
-                    val newUser = userRepository.saveUserWithHashedPassword(user)
-                    _registeredUser.value = newUser
-                    _emailAlreadyUsed.value = false
-                } catch (e: Exception) {
-                    // Manejo de errores si lo necesitas
-                }
-            }
+    fun loadSession() {
+        val user = userRepository.getUser()
+        if (user != null) {
+            _currentUser.value = user
+            _isAuthenticated.value = true
+        } else {
+            _currentUser.value = null
+            _isAuthenticated.value = false
         }
     }
 
@@ -82,14 +74,7 @@ class UserViewModel @Inject constructor(
         _currentUser.value = null
     }
 
-    fun saveSession(token: String) {
-        userRepository.saveAuthToken(token)
-    }
 
-    fun loadSession() {
-        val token = userRepository.getAuthToken()
-        _isAuthenticated.value = token != null
-    }
     fun resetEmailAlreadyUsedFlag() {
         _emailAlreadyUsed.value = false
     }
@@ -97,4 +82,35 @@ class UserViewModel @Inject constructor(
     fun clearLoginError() {
         _loginError.value = null
     }
+    fun registerUserRemote(request: UserRegisterRequest) {
+        viewModelScope.launch {
+            try {
+                val success = userRepository.registerUser(request)
+
+                if (success) {
+                    // Si querés, podés transformar el DTO a un User local (aunque por ahora no tenés city ni dateOfBirth en el backend)
+                    _registeredUser.value = User(
+                        id = 0,
+                        username = request.username,
+                        email = request.email,
+                        password = request.password,
+                        city = "", // o lo que decidas más adelante
+                        dateOfBirth = "",
+                        name = request.firstName,
+                        surname = request.lastName,
+                        image = 1,
+                        favoriteProducts = null
+                    )
+                    _emailAlreadyUsed.value = false
+                } else {
+                    _registeredUser.value = null
+                    _emailAlreadyUsed.value = true
+                }
+            } catch (e: Exception) {
+                _registeredUser.value = null
+                _emailAlreadyUsed.value = true
+            }
+        }
+    }
+
 }

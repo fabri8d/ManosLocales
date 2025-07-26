@@ -1,10 +1,12 @@
 package com.undef.ManosLocales.data.mapper
 
+import com.undef.ManosLocales.R
 import com.undef.ManosLocales.data.local.entities.Product
 import com.undef.ManosLocales.data.local.entities.User
 import com.undef.ManosLocales.data.local.entities.room.UserEntity
+import com.undef.ManosLocales.data.remote.models.UserDto
 
-// De UserEntity a User
+// De UserEntity a User (ya lo tenés)
 fun UserEntity.toDomain(favoriteProducts: MutableList<Product> = mutableListOf()): User {
     return User(
         id = id,
@@ -20,17 +22,18 @@ fun UserEntity.toDomain(favoriteProducts: MutableList<Product> = mutableListOf()
     )
 }
 
-// De User a UserEntity
-fun User.toEntity(): UserEntity {
-    return UserEntity(
+// 🆕 De UserDto (API) a User (modelo local)
+fun UserDto.toDomain(): User {
+    return User(
         id = id,
-        name = name,
-        surname = surname,
-        dateOfBirth = dateOfBirth,
+        name = firstName,
+        surname = lastName,
+        dateOfBirth = "", // Si después el backend lo incluye, se actualiza
         username = username,
         email = email,
         password = password,
-        city = city,
-        image = image
+        city = "", // Lo mismo
+        favoriteProducts = mutableListOf(),
+        image = R.drawable.usuario // recurso de imagen por defecto
     )
 }
